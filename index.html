@@ -1,1 +1,66 @@
-Hello
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Expense Data</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<form action="#">
+		<div class="form-group">
+			<div class="container">
+			  <h4>Date</h4>
+				<div class="form-group col-sm-4">
+					<input type="text" class="form-control" id="date">
+				</div>
+			</div>
+			<div class="container">
+			  <h4>Expense Category</h4>
+			  <div class="btn-group form-group col-sm-12">
+				<button type="button" class="btn btn-primary">Monthly Bill</button>
+				<button type="button" class="btn btn-primary">Grocery</button>
+				<button type="button" class="btn btn-primary">Shopping</button>
+				<button type="button" class="btn btn-primary">Outside Food</button>
+				<button type="button" class="btn btn-primary">Travel</button>
+				<button type="button" class="btn btn-primary">School TPS</button>
+				<button type="button" class="btn btn-primary">School CNS</button>
+				<button type="button" class="btn btn-primary">Misc</button>
+			  </div>
+			</div>
+
+			<div class="container">
+			  <h4>Payment Category</h4>
+			  <div class="btn-group form-group col-sm-12">
+				<button type="button" class="btn btn-primary">Cash</button>
+				<button type="button" class="btn btn-primary">HSBC CC</button>
+				<button type="button" class="btn btn-primary">PayTM</button>
+				<button type="button" class="btn btn-primary">HDFC DC</button>
+				<button type="button" class="btn btn-primary">SBI DC</button>
+			  </div>
+			</div>
+			
+			<div class="container">
+			  <h4>Description</h4>
+				<div class="form-group col-sm-4">
+					<input type="text" class="form-control" id="description">
+				</div>
+			</div>
+		
+			<div class="container">
+			  <h4>Price</h4>
+				<div class="form-group col-sm-4">
+					<input type="text" class="form-control" id="price">
+				</div>
+			</div>
+			
+			<div class="container">
+				<button type="submit" class="btn btn-primary">Submit</button>
+			</div>
+  		</div>
+	</form>
+
+</body>
+</html>
