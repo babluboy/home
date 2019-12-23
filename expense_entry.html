@@ -112,7 +112,7 @@
 			<div class="container">
 				<h4>Description</h4>
 				<div class="form-group col-sm-4">
-					<input type="text" class="form-control" name="Description" id="Description">
+					<input type="text" class="form-control" name="Description" id="Description" onfocusout="predict_category_info(this.value)">
 				</div>
 			</div>
 			<div class="container">
@@ -124,7 +124,15 @@
 			<div class="container">
 				<h4>Category</h4>
 				<div class="form-group col-sm-4">
-					<input type="text" class="form-control" name="Category" id="Category">
+				  <select class="form-control col-sm-4" name="Category" id="Category">
+				    <option>Unknown</option>
+				    <option>Grocery</option>
+				    <option>Outside Food</option>
+				    <option>Monthly</option>
+				    <option>Travel</option>
+				    <option>Life Needs</option>
+				    <option>Shopping</option>
+				  </select>
 				</div>
 			</div>
 			<div class="container">
@@ -152,16 +160,13 @@
   		</div>
 	</form>
 	<script src='google-sheet-activity-data.js'></script>
+	<script src='misc.js'></script>
     <script type="text/javascript">
     	//pop up for date time picker
         $(function () {
         	var dateNow = new Date();
             $('#datepicker').datetimepicker({defaultDate:dateNow});
          });
-        //set paid by based on button clicked
-        function paid_by(data){
-        	document.getElementById("Paid_With").value = data;
-        }
     </script>
 </body>
 </html>
