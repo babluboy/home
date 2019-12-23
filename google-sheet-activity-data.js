@@ -3,6 +3,16 @@ var request;
 
 // Daily Log Data - Bind to the submit event of our form
 $("#foo").submit(function(event){
+       // Abort if Amount and Description is empty
+       if(
+            document.getElementById("Amount").value == null || 
+            document.getElementById("Amount").value == "" || 
+            document.getElementById("Description").value == null ||
+            document.getElementById("Description").value == ""
+        ){
+            alert("Resubmit after entering Amount and Description");
+            return 0;
+       }
        // Abort any pending request
 		if (request) {
 			request.abort();
@@ -35,7 +45,7 @@ $("#foo").submit(function(event){
         console.log(response);
         console.log(textStatus);
         console.log(jqXHR);
-        //window.location.href="results_activity.html";
+        window.location.href="index.html";
     });
 
     // Callback handler that will be called on failure
