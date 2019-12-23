@@ -4,17 +4,20 @@
   <title>Expense Data</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 </head>
 <body>
-	<form action="#">
+	<form target="_self" method="post" id='foo' action="#">
+		<input type="hidden" name="Category" id="Category" value="xx">
+		<input type="hidden" name="Sub Category" id="Sub Category" value="yy">
 		<div class="form-group">
 			<div class="container">
 			  <h4>Date</h4>
 				<div class="form-group col-sm-4">
-					<input type="text" class="form-control" id="date">
+					<input type="date" class="form-control" name="Date" id="Date">
 				</div>
 			</div>
 			<div class="container">
@@ -57,10 +60,10 @@
 			</div>
 			
 			<div class="container">
-				<button type="submit" class="btn btn-primary">Submit</button>
+				<input class="btn btn-default btn-lg" id="submit-form-button" type="submit" value="Submit" />
 			</div>
   		</div>
 	</form>
-
+	<script src='google-sheet-activity-data.js'></script>
 </body>
 </html>
