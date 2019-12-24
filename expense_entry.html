@@ -16,80 +16,6 @@
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
-
-
-	<style>
-	    /**
-	     * Reset button styles
-	     * It takes some work to achieve a “blank slate” look.
-	     */
-	    button {
-	      padding: 0;
-	      border: none;
-	      font: inherit;
-	      color: inherit;
-	      background-color: transparent;
-	      /* show a hand cursor on hover; some argue that we
-	      should keep the default arrow cursor for buttons */
-	      cursor: pointer;
-	    }
-
-	    /**
-	     * Button component
-	     */
-	    .btn {
-	      /* default for <button>, but needed for <a> */
-	      display: inline-block;
-	      text-align: center;
-	      text-decoration: none;
-
-	      /* create a small space when buttons wrap on 2 lines */
-	      margin: 2px 0;
-
-	      /* invisible border (will be colored on hover/focus) */
-	      border: solid 1px transparent;
-	      border-radius: 4px;
-
-	      /* button size comes from text + padding, avoid height */
-	      padding: 0.5em 1em;
-
-	      /* make sure colors have enough contrast! */
-	      color: #FFFFFF;
-	      /*background-color: #9555AF;*/
-	    }
-
-	    /* old-school "down" effect on clic + color tweak */
-	    .btn:active {
-	      transform: translateY(1px);
-	      filter: saturate(150%);
-	    }
-
-	    /* inverse colors on hover */
-	    .btn:hover {
-	      /*color: #9050AA;*/
-	      border-color: currentColor;
-	      /*background-color: white;*/
-	    }
-
-	    /* Firefox: remove the inner border shown on focus */
-	    .btn::-moz-focus-inner {
-	      border: none;
-	    }
-
-	    /* make sure we have a visible focus ring */
-	    .btn:focus {
-	      outline: none;
-	      box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.5),
-	        0 0 0 1.5px rgba(255, 105, 180, 0.5);
-	    }
-
-	    /* hide focus style if not from keyboard navigation */
-	    .js-focus-visible .btn:focus:not(.focus-visible) {
-	      box-shadow: none;
-	    }
-	  </style>
-
-
 </head>
 <body>
 	<form target="_self" method="post" id='foo' action="#">
@@ -98,7 +24,7 @@
 		<div class="form-group">
 			<div class="container">
 			  	<h4>Date</h4>
-			    <div class='col-sm-6'>
+			    <div class='col-sm-4'>
 	            	<div class="form-group">
 	                	<div class='input-group date' id='datepicker'>
 	                    	<input type='text' class="form-control" id="DateTime" name="DateTime" />
@@ -143,17 +69,25 @@
 			</div>
 			<div class="container">
 			  <h4>Paid By</h4>
-			  <div class="btn-group form-group col-sm-12">
-				<button type="button" id="Cash" class="btn btn-primary" onclick="paid_by('Cash')">Cash</button>
-				<button type="button" id="HSBC CC" class="btn btn-primary" onclick="paid_by('HSBC CC	')">HSBC CC</button>
-				<button type="button" id="HDFC CC" class="btn btn-primary" onclick="paid_by('HDFC CC')">HDFC CC</button>
-				<button type="button" id="AMEX CC" class="btn btn-primary" onclick="paid_by('AMEX CC')">AMEX CC</button>
-				<button type="button" id="RBL CC" class="btn btn-primary" onclick="paid_by('RBL CC')">RBL CC</button>
-				<button type="button" id="HDFC CC" class="btn btn-primary" onclick="paid_by('HDFC CC')">HDFC Bank</button>
-				<button type="button" id="Free" class="btn btn-primary" onclick="paid_by('Free')">Free</button>
-			  </div>
+			  <div class="container">
+				<div class="custom-control custom-radio">
+			  		<input type="radio" class="custom-control-input" id="Cash" name="groupOfDefaultRadios" onclick="paid_by('Cash')" checked>
+				  	<label class="custom-control-label" for="Cash">CASH&nbsp;&nbsp;&nbsp;&nbsp;</label>
+				  	<input type="radio" class="custom-control-input" id="HSBC CC" name="groupOfDefaultRadios" onclick="paid_by('HSBC CC')">
+				  	<label class="custom-control-label" for="HSBC CC">HSBC CC</label>
+				  	<input type="radio" class="custom-control-input" id="HDFC CC" name="groupOfDefaultRadios" onclick="paid_by('HDFC CC')">
+				  	<label class="custom-control-label" for="HDFC CC">HDFC CC</label>
+				</div>
+				<div class="custom-control custom-radio">
+			  		<input type="radio" class="custom-control-input" id="AMEX CC" name="groupOfDefaultRadios" onclick="paid_by('AMEX CC')">
+				  	<label class="custom-control-label" for="AMEX CC">AMEX CC</label>
+				  	<input type="radio" class="custom-control-input" id="RBL CC" name="groupOfDefaultRadios" onclick="paid_by('RBL CC')">
+				  	<label class="custom-control-label" for="RBL CC">RBL CC&nbsp;</label>
+				  	<input type="radio" class="custom-control-input" id="HDFC Bank" name="groupOfDefaultRadios" onclick="paid_by('HDFC Bank')">
+				  	<label class="custom-control-label" for="HDFC Bank">HDFC IB&nbsp;</label>
+				</div>
 			</div>
-			
+				
 			<div class="container">
 				<input class="btn btn-primary" id="submit-form-button" type="submit" value="Submit" />
 			</div>
