@@ -45,7 +45,8 @@ $("#foo").submit(function(event){
         console.log(response);
         console.log(textStatus);
         console.log(jqXHR);
-        window.location.href="index.html";
+        //redirect to sucess page
+        window.location.href="index.html?expense_entry=Sucessfully recorded expense amount for: "+document.getElementById("Amount").value;
     });
 
     // Callback handler that will be called on failure

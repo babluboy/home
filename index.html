@@ -1,18 +1,88 @@
+<!--
+
+  //2019 query for Month Total:
+  https://docs.google.com/spreadsheets/d/1XXha4dPZusqhsoRyA9RWq9G5rx2c3BxCdWnn5x4NYS4/gviz/tq?tqx=out:html&gid=1989072520&tq=SELECT%20sum(D)%20WHERE%20date%20%272019-12-01%27%20%3C%3D%20A%20and%20date%20%272019-12-31%27%20%3E%3D%20A
+  
+  //Query Encoder: 
+  https://meyerweb.com/eric/tools/dencoder/
+
+  2020 sheet id: 1RVfOYdb-PFwGkDm8M7KNUvYM4P8xtVJlJG2bh2K7cpU
+  2020 sheet gid: 0
+
+  //Base URL:
+  https://docs.google.com/spreadsheets/d/1RVfOYdb-PFwGkDm8M7KNUvYM4P8xtVJlJG2bh2K7cpU/gviz/tq?tqx=out:html&gid=1989072520&tq=
+
+  //Query for Monthly Total (ignoring negative amounts):
+  Decoded: SELECT sum(E) WHERE date '2020-01-01' <= A and date '2020-01-31' >= A and E > 0 label sum(E) 'This Month Total Expense'
+  Encoded: SELECT%20sum(E)%20WHERE%20date%20%272020-01-01%27%20%3C%3D%20A%20and%20date%20%272020-01-31%27%20%3E%3D%20A%20and%20E%20%3E%200%20label%20sum(E)%20%27This%20Month%20Total%20Expense%27
+
+  //Query for Net Month Total (including credits for salary and rent):
+  Decoded: SELECT sum(E) WHERE date '2020-01-01' <= A and date '2020-01-31' >= A label sum(E) 'This Month Total Expense'
+  Encoded: SELECT%20sum(E)%20WHERE%20date%20%272020-01-01%27%20%3C%3D%20A%20and%20date%20%272020-01-31%27%20%3E%3D%20A%20label%20sum(E)%20%27This%20Month%20Total%20Expense%27
+-->
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <title>Expense Data</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-</head>
-<body>
-	<h2>Thanks your entry has been recorded.</h2>
-	<p>
-		<a href="expense_entry.html">Add another entry</a>
-	</p>
+  <head>
+    <title>Expense Data</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+    	<h2>Das Family Expense Register</h2>
+    	<p>
+         <div id="Expense_Entry_Sucess"></div>
+        <div>
+    		  <a href="expense_entry.html">Add another entry</a>
+        </div>
+    	</p>
+
+      <p>
+        <div id="Month_Total"></div>
+        <div id="Net_Month_Total"></div>
+      </p>
+      
+
+    </div>
+
+    <script>
+      //Set data for acknowledgement if coming here after entering expense data
+      var page_param = parent.document.URL.substring(parent.document.URL.indexOf('?'), parent.document.URL.length);;
+      if(page_param.indexOf("?") != -1){
+        sucess_message = page_param.replace("?expense_entry=","");
+        sucess_message = decodeURI(sucess_message);
+        document.getElementById("Expense_Entry_Sucess").innerHTML = sucess_message;
+      }
+
+      //Set data for Querying details from the spreadsheet
+      now = new Date();
+      current_month = now.getMonth()+1;
+      if(current_month == 9 || current_month == 4 || current_month == 6 || 11){
+        end_date_of_month = 30;
+      }else{
+        end_date_of_month = 31;
+      }
+      
+      var start_date_of_month = now.getFullYear()+"-"+current_month+"-"+"01";
+      var end_date_of_month = now.getFullYear()+"-"+current_month+"-"+end_date_of_month;
+      start_date_of_month = "2020-01-01";
+      end_date_of_month = "2020-01-31";
+
+      var base_URL = 'https://docs.google.com/spreadsheets/d/1RVfOYdb-PFwGkDm8M7KNUvYM4P8xtVJlJG2bh2K7cpU/gviz/tq?tqx=out:html&gid=1989072520&tq=';
+      var encoded_query_monthly_total = 'SELECT%20sum(E)%20WHERE%20date%20%27'+start_date_of_month+'%27%20%3C%3D%20A%20and%20date%20%27'+end_date_of_month+'%27%20%3E%3D%20A%20and%20E%20%3E%200%20label%20sum(E)%20%27This%20Month%20Total%20Expense%27';
+      //alert(encoded_query_monthly_total);
+      var monthly_total = '<object type="text/html" data="'+base_URL+encoded_query_monthly_total+'" ></object>';
+      document.getElementById("Month_Total").innerHTML = monthly_total;
+
+      var encoded_query_net_monthly_total = 'SELECT%20sum(E)%20WHERE%20date%20%27'+start_date_of_month+'%27%20%3C%3D%20A%20and%20date%20%27'+end_date_of_month+'%27%20%3E%3D%20A%20label%20sum(E)%20%27This%20Month%20Net%20Total%27';
+      var net_monthly_total = '<object type="text/html" data="'+base_URL+encoded_query_net_monthly_total+'" ></object>';
+      document.getElementById("Net_Month_Total").innerHTML = net_monthly_total;
+
+    </script>
 </body>
 </html>
