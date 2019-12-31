@@ -41,9 +41,13 @@
         		document.getElementById("Category").value = "Outside Food";
         		document.getElementById("Sub_Category").value = "Snacks";
         	}
+                if(data.includes("paneer")){
+                        document.getElementById("Category").value = "Outside Food";
+                        document.getElementById("Sub_Category").value = "Cooked Meals";
+                }
         	if(data.includes("swiggy") || data.includes("zomato") || data.includes("domino") || data.includes("donald") || data.includes("pizza") || data.includes("hotel")){
         		document.getElementById("Category").value = "Outside Food";
-        		document.getElementById("Sub_Category").value = "Meals";
+        		document.getElementById("Sub_Category").value = "Readymade Meals";
         	}
         	if(data.includes("gas")){
         		document.getElementById("Category").value = "Monthly";
