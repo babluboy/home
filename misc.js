@@ -129,7 +129,7 @@
         		document.getElementById("Category").value = "Life Needs";
         		document.getElementById("Sub_Category").value = "Medicines";
         	}
-        	if(data.includes("central") || data.includes("shopper") || data.includes("dress")){
+        	if(data.includes("central") || data.includes("shop") || data.includes("dress")){
         		document.getElementById("Category").value = "Shopping";
         		document.getElementById("Sub_Category").value = "Clothes";
         	}
@@ -137,4 +137,8 @@
         		document.getElementById("Category").value = "Shopping";
         		document.getElementById("Sub_Category").value = "Entertainment";
         	}
+                if(data.includes("repair")){
+                        document.getElementById("Category").value = "House Needs";
+                        document.getElementById("Sub_Category").value = "Repairs";
+                }
         }

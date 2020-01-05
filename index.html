@@ -9,7 +9,7 @@
   2020 sheet gid: 0
 
   //Base URL:
-  https://docs.google.com/spreadsheets/d/1RVfOYdb-PFwGkDm8M7KNUvYM4P8xtVJlJG2bh2K7cpU/gviz/tq?tqx=out:html&gid=1989072520&tq=
+    
 
   //Query for Monthly Total (ignoring negative amounts):
   Decoded: SELECT sum(E) WHERE date '2020-01-01' <= A and date '2020-01-31' >= A and E > 0 label sum(E) 'This Month Total Expense'
@@ -65,10 +65,15 @@
             <option>Travel</option>
             <option>Life Needs</option>
             <option>Shopping</option>
+            <option>House Needs</option>
           </select>
         </div>
+         <div class="w-100 p-3" id="Month_Category_Total"></div>
       </p>
-      <div id="Month_Category_Total"></div>
+     
+      <p>
+        <div class="w-100 p-3" id="Month_Category_Details"></div>
+      </p>
 
     </div>
 
@@ -117,7 +122,13 @@
         var category = document.getElementById("Category").value;
         var encoded_query_monthly_category_total = 'SELECT%20sum(E)%20WHERE%20date%20%272020-01-01%27%20%3C%3D%20A%20and%20date%20%272020-01-31%27%20%3E%3D%20A%20and%20B%20%3D%20%27'+category+'%27%20and%20E%20%3E%200%20label%20sum(E)%20%27This%20Month%20Category%20Expense%27';
         var monthly_category_total = '<object type="text/html" data="'+base_URL+encoded_query_monthly_category_total+'" ></object>';
-        document.getElementById("Month_Category_Total").innerHTML = monthly_category_total;    
+        document.getElementById("Month_Category_Total").innerHTML = monthly_category_total;
+
+        var category = document.getElementById("Category").value;
+        var encoded_query_monthly_details = 'SELECT%20A%2CB%2CC%2CD%2CE%2C%20F%20WHERE%20date%20%272020-01-01%27%20%3C%3D%20A%20and%20date%20%272020-01-31%27%20%3E%3D%20A%20and%20B%20%3D%20%27'+category+'%27%20and%20E%20%3E%200';
+        var monthly_category_details = '<object width="100%" type="text/html" data="'+base_URL+encoded_query_monthly_details+'" ></object>';
+        document.getElementById("Month_Category_Details").innerHTML = monthly_category_details;
+
       }
 
     </script>
