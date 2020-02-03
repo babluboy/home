@@ -38,6 +38,18 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+
+
+    <style type="text/css">
+      .dropdown-menu {
+        width: 50%; 
+      }
+
+      .btn{
+        width: 100%;
+      }
+    </style>
+
   </head>
   <body>
     <div class="container">
@@ -51,26 +63,29 @@
 
       <p>
         <div id="Month_Total"></div>
+        <div id="Month_Total_Distribution"></div>
+
         <div id="Net_Month_Total"></div>
         <div id="Net_Year_Total"></div>
       </p>
       
       <p>
-        <div class="form-group col-sm-4">
-          <select class="form-control col-sm-4" name="Category" id="Category" onchange="updateCategorySpend()">
-            <option>Unknown</option>
+        <div>
+          <select class="form-control" name="Category" id="Category" onchange="updateCategorySpend()">
+            <option selected>Unknown</option>
             <option>Grocery</option>
             <option>Outside Food</option>
-            <option selected>Monthly</option>
+            <option>Monthly</option>
             <option>Travel</option>
             <option>Life Needs</option>
             <option>Shopping</option>
             <option>House Needs</option>
           </select>
         </div>
-         <div class="w-100 p-3" id="Month_Category_Total"></div>
       </p>
-     
+      <p>
+         <div class="w-100 p-3" align="left" id="Month_Category_Total"></div>
+      </p>
       <p>
         <div class="w-100 p-3" id="Month_Category_Details"></div>
       </p>
@@ -86,26 +101,37 @@
         document.getElementById("Expense_Entry_Sucess").innerHTML = sucess_message;
       }
 
-      //Set data for Querying details from the spreadsheet
+      //Set date for Querying details from the spreadsheet
       now = new Date();
       current_month = now.getMonth()+1;
-      if(current_month == 9 || current_month == 4 || current_month == 6 || 11){
+      if(current_month == 9 || current_month == 4 || current_month == 6 || current_month == 11){
         end_date_of_month = 30;
+      }else if(current_month == 2){
+        end_date_of_month = 28;
       }else{
         end_date_of_month = 31;
+      }
+      //Set month to double digits
+      if(String(current_month).length < 2){
+        current_month = "0" + String(current_month);
       }
       
       var start_date_of_month = now.getFullYear()+"-"+current_month+"-"+"01";
       var end_date_of_month = now.getFullYear()+"-"+current_month+"-"+end_date_of_month;
-      start_date_of_month = "2020-01-01";
-      end_date_of_month = "2020-01-31";
+      //start_date_of_month = "2020-01-01";
+      //end_date_of_month = "2020-01-31";
 
       var base_URL = 'https://docs.google.com/spreadsheets/d/1RVfOYdb-PFwGkDm8M7KNUvYM4P8xtVJlJG2bh2K7cpU/gviz/tq?tqx=out:html&gid=1989072520&tq=';
+
+
       var encoded_query_monthly_total = 'SELECT%20sum(E)%20WHERE%20date%20%27'+start_date_of_month+'%27%20%3C%3D%20A%20and%20date%20%27'+end_date_of_month+'%27%20%3E%3D%20A%20and%20E%20%3E%200%20label%20sum(E)%20%27This%20Month%20Total%20Expense%27';
-      //alert(encoded_query_monthly_total);
       var monthly_total = '<object type="text/html" data="'+base_URL+encoded_query_monthly_total+'" ></object>';
       document.getElementById("Month_Total").innerHTML = monthly_total;
 
+      var encoded_query_monthly_total_distribution = 'SELECT%20B%2CSUM(E)%20WHERE%20date%20%27'+start_date_of_month+'%27%20%3C%3D%20A%20and%20date%20%27'+end_date_of_month+'%27%20%3E%3D%20A%20and%20E%20%3E%200%20group%20by%20B%20order%20by%20SUM(E)%20desc%20label%20SUM(E)%20%27Total%27';
+      var monthly_total_distribution = '<object type="text/html" data="'+base_URL+encoded_query_monthly_total_distribution+'" ></object>';
+      document.getElementById("Month_Total_Distribution").innerHTML = monthly_total_distribution;
+      
       var encoded_query_net_monthly_total = 'SELECT%20sum(E)%20WHERE%20date%20%27'+start_date_of_month+'%27%20%3C%3D%20A%20and%20date%20%27'+end_date_of_month+'%27%20%3E%3D%20A%20label%20sum(E)%20%27This%20Month%20Net%20Total%27';
       var net_monthly_total = '<object type="text/html" data="'+base_URL+encoded_query_net_monthly_total+'" ></object>';
       document.getElementById("Net_Month_Total").innerHTML = net_monthly_total;
@@ -114,23 +140,22 @@
       var net_annual_total = '<object type="text/html" data="'+base_URL+encoded_query_net_annual_total+'" ></object>';
       document.getElementById("Net_Year_Total").innerHTML = net_annual_total;
 
-      var encoded_query_monthly_category_total = 'SELECT%20sum(E)%20WHERE%20date%20%272020-01-01%27%20%3C%3D%20A%20and%20date%20%272020-01-31%27%20%3E%3D%20A%20and%20B%20%3D%20%27Monthly%27%20and%20E%20%3E%200%20label%20sum(E)%20%27This%20Month%20Category%20Expense%27';
+      var encoded_query_monthly_category_total = 'SELECT%20sum(E)%20WHERE%20date%20%27'+start_date_of_month+'%27%20%3C%3D%20A%20and%20date%20%27'+end_date_of_month+'%27%20%3E%3D%20A%20and%20B%20%3D%20%27Monthly%27%20and%20E%20%3E%200%20label%20sum(E)%20%27This%20Month%20Category%20Expense%27';
       var monthly_category_total = '<object type="text/html" data="'+base_URL+encoded_query_monthly_category_total+'" ></object>';
       document.getElementById("Month_Category_Total").innerHTML = monthly_category_total;
 
       function updateCategorySpend(){
         var category = document.getElementById("Category").value;
-        var encoded_query_monthly_category_total = 'SELECT%20sum(E)%20WHERE%20date%20%272020-01-01%27%20%3C%3D%20A%20and%20date%20%272020-01-31%27%20%3E%3D%20A%20and%20B%20%3D%20%27'+category+'%27%20and%20E%20%3E%200%20label%20sum(E)%20%27This%20Month%20Category%20Expense%27';
+        var encoded_query_monthly_category_total = 'SELECT%20sum(E)%20WHERE%20date%20%27'+start_date_of_month+'%27%20%3C%3D%20A%20and%20date%20%27'+end_date_of_month+'%27%20%3E%3D%20A%20and%20B%20%3D%20%27'+category+'%27%20and%20E%20%3E%200%20label%20sum(E)%20%27This%20Month%20Category%20Expense%27';
         var monthly_category_total = '<object type="text/html" data="'+base_URL+encoded_query_monthly_category_total+'" ></object>';
         document.getElementById("Month_Category_Total").innerHTML = monthly_category_total;
 
         var category = document.getElementById("Category").value;
-        var encoded_query_monthly_details = 'SELECT%20A%2CB%2CC%2CD%2CE%2C%20F%20WHERE%20date%20%272020-01-01%27%20%3C%3D%20A%20and%20date%20%272020-01-31%27%20%3E%3D%20A%20and%20B%20%3D%20%27'+category+'%27%20and%20E%20%3E%200';
+        var encoded_query_monthly_details = 'SELECT%20A%2CB%2CC%2CD%2CE%2C%20F%20WHERE%20date%20%27'+start_date_of_month+'%27%20%3C%3D%20A%20and%20date%20%27'+end_date_of_month+'%27%20%3E%3D%20A%20and%20B%20%3D%20%27'+category+'%27%20and%20E%20%3E%200%20order%20by%20A%20desc';
         var monthly_category_details = '<object width="100%" type="text/html" data="'+base_URL+encoded_query_monthly_details+'" ></object>';
         document.getElementById("Month_Category_Details").innerHTML = monthly_category_details;
 
       }
-
     </script>
 </body>
 </html>
