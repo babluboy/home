@@ -52,25 +52,34 @@
 
   </head>
   <body>
-    <div class="container">
-    	<h2>Family Expense Register</h2>
-    	<p>
-         <div id="Expense_Entry_Sucess"></div>
-        <div>
-    		  <a href="expense_entry.html">Add an expense entry entry >></a>
+    <div>
+    	<h2>Expense Register</h2>
+      <div id="Expense_Entry_Sucess"></div>
+      <div class="row col-sm-2">
+    		  <button type="button" class="btn btn-primary" onclick="window.location.href='expense_entry.html'">Expense Entry</button>
+      </div>
+
+      <br>
+      <hr>
+      <br>
+      <div class="row">
+        <div class="col-sm-2">
+          <select class="form-control" name="month" id="month" onchange="updateMonthlySpend()">
+            <option value="1">Jan</option>
+            <option value="2">Feb</option>
+            <option value="3">Mar</option>
+            <option value="4">Apr</option>
+            <option value="5">May</option>
+            <option value="6">Jun</option>
+            <option value="7">Jul</option>
+            <option value="8">Aug</option>
+            <option value="9">Sep</option>
+            <option value="10">Oct</option>
+            <option value="11">Nov</option>
+            <option value="12">Dec</option>
+          </select>
         </div>
-    	</p>
-
-      <p>
-        <div id="Month_Total"></div>
-        <div id="Month_Total_Distribution"></div>
-
-        <div id="Net_Month_Total"></div>
-        <div id="Net_Year_Total"></div>
-      </p>
-      
-      <p>
-        <div>
+        <div class="col-sm-2">
           <select class="form-control" name="Category" id="Category" onchange="updateCategorySpend()">
             <option selected>Unknown</option>
             <option>Grocery</option>
@@ -82,14 +91,15 @@
             <option>House Needs</option>
           </select>
         </div>
-      </p>
-      <p>
-         <div class="w-100 p-3" align="left" id="Month_Category_Total"></div>
-      </p>
-      <p>
-        <div class="w-100 p-3" id="Month_Category_Details"></div>
-      </p>
+      </div>
+      <div class="container col-sm-2" id="Month_Total"></div>
+      <div class="container col-sm-2" id="Month_Total_Distribution"></div>
 
+      <div class="container col-sm-2" id="Net_Month_Total"></div>
+      <div class="container col-sm-2" id="Net_Year_Total"></div>
+    
+      <div class="container col-sm-2" align="left" id="Month_Category_Total"></div>
+      <div class="container col-sm-2" id="Month_Category_Details"></div>
     </div>
 
     <script>
@@ -102,25 +112,9 @@
       }
 
       //Set date for Querying details from the spreadsheet
-      now = new Date();
-      current_month = now.getMonth()+1;
-      if(current_month == 9 || current_month == 4 || current_month == 6 || current_month == 11){
-        end_date_of_month = 30;
-      }else if(current_month == 2){
-        end_date_of_month = 28;
-      }else{
-        end_date_of_month = 31;
-      }
-      //Set month to double digits
-      if(String(current_month).length < 2){
-        current_month = "0" + String(current_month);
-      }
+      start_date_of_month = getStartAndEndDatesFromMonth()[0];
+      end_date_of_month = getStartAndEndDatesFromMonth()[1];
       
-      var start_date_of_month = now.getFullYear()+"-"+current_month+"-"+"01";
-      var end_date_of_month = now.getFullYear()+"-"+current_month+"-"+end_date_of_month;
-      //start_date_of_month = "2020-01-01";
-      //end_date_of_month = "2020-01-31";
-
       var base_URL = 'https://docs.google.com/spreadsheets/d/1RVfOYdb-PFwGkDm8M7KNUvYM4P8xtVJlJG2bh2K7cpU/gviz/tq?tqx=out:html&gid=1989072520&tq=';
 
 
@@ -140,13 +134,41 @@
       var net_annual_total = '<object type="text/html" data="'+base_URL+encoded_query_net_annual_total+'" ></object>';
       document.getElementById("Net_Year_Total").innerHTML = net_annual_total;
 
-      var encoded_query_monthly_category_total = 'SELECT%20sum(E)%20WHERE%20date%20%27'+start_date_of_month+'%27%20%3C%3D%20A%20and%20date%20%27'+end_date_of_month+'%27%20%3E%3D%20A%20and%20B%20%3D%20%27Monthly%27%20and%20E%20%3E%200%20label%20sum(E)%20%27This%20Month%20Category%20Expense%27';
-      var monthly_category_total = '<object type="text/html" data="'+base_URL+encoded_query_monthly_category_total+'" ></object>';
-      document.getElementById("Month_Category_Total").innerHTML = monthly_category_total;
+      //var encoded_query_monthly_category_total = 'SELECT%20sum(E)%20WHERE%20date%20%27'+start_date_of_month+'%27%20%3C%3D%20A%20and%20date%20%27'+end_date_of_month+'%27%20%3E%3D%20A%20and%20B%20%3D%20%27Monthly%27%20and%20E%20%3E%200%20label%20sum(E)%20%27This%20Month%20Category%20Expense%27';
+      //var monthly_category_total = '<object type="text/html" data="'+base_URL+encoded_query_monthly_category_total+'" ></object>';
+      //document.getElementById("Month_Category_Total").innerHTML = monthly_category_total;
+
+      function updateMonthlySpend(){
+
+        start_date_of_month = getStartAndEndDatesFromMonth(document.getElementById("month").value)[0];
+        end_date_of_month = getStartAndEndDatesFromMonth(document.getElementById("month").value)[1];
+
+        var encoded_query_monthly_total = 'SELECT%20sum(E)%20WHERE%20date%20%27'+start_date_of_month+'%27%20%3C%3D%20A%20and%20date%20%27'+end_date_of_month+'%27%20%3E%3D%20A%20and%20E%20%3E%200%20label%20sum(E)%20%27This%20Month%20Total%20Expense%27';
+        var monthly_total = '<object type="text/html" data="'+base_URL+encoded_query_monthly_total+'" ></object>';
+        document.getElementById("Month_Total").innerHTML = monthly_total;
+
+        var encoded_query_monthly_total_distribution = 'SELECT%20B%2CSUM(E)%20WHERE%20date%20%27'+start_date_of_month+'%27%20%3C%3D%20A%20and%20date%20%27'+end_date_of_month+'%27%20%3E%3D%20A%20and%20E%20%3E%200%20group%20by%20B%20order%20by%20SUM(E)%20desc%20label%20SUM(E)%20%27Total%27';
+        var monthly_total_distribution = '<object type="text/html" data="'+base_URL+encoded_query_monthly_total_distribution+'" ></object>';
+        document.getElementById("Month_Total_Distribution").innerHTML = monthly_total_distribution;
+        
+        var encoded_query_net_monthly_total = 'SELECT%20sum(E)%20WHERE%20date%20%27'+start_date_of_month+'%27%20%3C%3D%20A%20and%20date%20%27'+end_date_of_month+'%27%20%3E%3D%20A%20label%20sum(E)%20%27This%20Month%20Net%20Total%27';
+        var net_monthly_total = '<object type="text/html" data="'+base_URL+encoded_query_net_monthly_total+'" ></object>';
+        document.getElementById("Net_Month_Total").innerHTML = net_monthly_total;
+
+        var encoded_query_net_annual_total = 'SELECT%20sum(E)%20label%20sum(E)%20%27This%20Year%20Net%20Total%27';
+        var net_annual_total = '<object type="text/html" data="'+base_URL+encoded_query_net_annual_total+'" ></object>';
+        document.getElementById("Net_Year_Total").innerHTML = net_annual_total;
+
+        updateCategorySpend();
+      }
 
       function updateCategorySpend(){
         var category = document.getElementById("Category").value;
-        var encoded_query_monthly_category_total = 'SELECT%20sum(E)%20WHERE%20date%20%27'+start_date_of_month+'%27%20%3C%3D%20A%20and%20date%20%27'+end_date_of_month+'%27%20%3E%3D%20A%20and%20B%20%3D%20%27'+category+'%27%20and%20E%20%3E%200%20label%20sum(E)%20%27This%20Month%20Category%20Expense%27';
+        
+        start_date_of_month = getStartAndEndDatesFromMonth(document.getElementById("month").value)[0];
+        end_date_of_month = getStartAndEndDatesFromMonth(document.getElementById("month").value)[1];
+
+        var encoded_query_monthly_category_total = 'SELECT%20sum(E)%20WHERE%20date%20%27'+start_date_of_month+'%27%20%3C%3D%20A%20and%20date%20%27'+end_date_of_month+'%27%20%3E%3D%20A%20and%20B%20%3D%20%27'+category+'%27%20and%20E%20%3E%200%20label%20sum(E)%20%27Category%20Expense%27';
         var monthly_category_total = '<object type="text/html" data="'+base_URL+encoded_query_monthly_category_total+'" ></object>';
         document.getElementById("Month_Category_Total").innerHTML = monthly_category_total;
 
@@ -155,6 +177,33 @@
         var monthly_category_details = '<object width="100%" type="text/html" data="'+base_URL+encoded_query_monthly_details+'" ></object>';
         document.getElementById("Month_Category_Details").innerHTML = monthly_category_details;
 
+      }
+      function getStartAndEndDatesFromMonth(current_month = ""){
+        var now = new Date();
+        if(current_month == ""){
+          current_month = now.getMonth()+1;
+          document.getElementById("month").value = current_month;
+        }
+        //Set the end date based on the month
+        if(current_month == 9 || current_month == 4 || current_month == 6 || current_month == 11){
+          end_date_of_month = 30;
+        }else if(current_month == 2){
+          end_date_of_month = 28;
+        }else{
+          end_date_of_month = 31;
+        }
+        //Set month to double digits
+        if(String(current_month).length < 2){
+          current_month = "0" + String(current_month);
+        }
+        //Format start and end dates
+        var start_date_of_month = now.getFullYear()+"-"+current_month+"-"+"01"; //2020-01-01
+        var end_date_of_month = now.getFullYear()+"-"+current_month+"-"+end_date_of_month; //"2020-01-31"
+
+        var dates_array = [];
+        dates_array.push(start_date_of_month);
+        dates_array.push(end_date_of_month);
+        return dates_array;
       }
     </script>
 </body>
