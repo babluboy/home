@@ -92,14 +92,21 @@
           </select>
         </div>
       </div>
-      <div class="container col-sm-2" id="Month_Total"></div>
-      <div class="container col-sm-2" id="Month_Total_Distribution"></div>
+      
+      <div class="row">
+        <div class="container col-sm-2" id="Month_Total"></div>
+        <div class="container col-sm-2" id="Month_Total_Distribution"></div>
+      </div>
 
-      <div class="container col-sm-2" id="Net_Month_Total"></div>
-      <div class="container col-sm-2" id="Net_Year_Total"></div>
-    
-      <div class="container col-sm-2" align="left" id="Month_Category_Total"></div>
-      <div class="container col-sm-2" id="Month_Category_Details"></div>
+      <div class="row">
+        <div class="container col-sm-2" id="Net_Month_Total"></div>
+        <div class="container col-sm-2" id="Net_Year_Total"></div>
+      </div>
+
+      <div class="row">
+        <div class="container col-sm-2" align="left" id="Month_Category_Total"></div>
+        <div class="container col-sm-2" id="Month_Category_Details"></div>
+      </div>
     </div>
 
     <script>
@@ -108,12 +115,13 @@
       if(page_param.indexOf("?") != -1){
         sucess_message = page_param.replace("?expense_entry=","");
         sucess_message = decodeURI(sucess_message);
-        document.getElementById("Expense_Entry_Sucess").innerHTML = sucess_message;
+        window.getElementById("Expense_Entry_Sucess").innerHTML = sucess_message;
       }
 
       //Set date for Querying details from the spreadsheet
-      start_date_of_month = getStartAndEndDatesFromMonth()[0];
-      end_date_of_month = getStartAndEndDatesFromMonth()[1];
+      var start_end_dates = getStartAndEndDatesFromMonth();
+      start_date_of_month = start_end_dates[0];
+      end_date_of_month = start_end_dates[1];
       
       var base_URL = 'https://docs.google.com/spreadsheets/d/1RVfOYdb-PFwGkDm8M7KNUvYM4P8xtVJlJG2bh2K7cpU/gviz/tq?tqx=out:html&gid=1989072520&tq=';
 
@@ -121,7 +129,7 @@
       var encoded_query_monthly_total = 'SELECT%20sum(E)%20WHERE%20date%20%27'+start_date_of_month+'%27%20%3C%3D%20A%20and%20date%20%27'+end_date_of_month+'%27%20%3E%3D%20A%20and%20E%20%3E%200%20label%20sum(E)%20%27This%20Month%20Total%20Expense%27';
       var monthly_total = '<object type="text/html" data="'+base_URL+encoded_query_monthly_total+'" ></object>';
       document.getElementById("Month_Total").innerHTML = monthly_total;
-
+      
       var encoded_query_monthly_total_distribution = 'SELECT%20B%2CSUM(E)%20WHERE%20date%20%27'+start_date_of_month+'%27%20%3C%3D%20A%20and%20date%20%27'+end_date_of_month+'%27%20%3E%3D%20A%20and%20E%20%3E%200%20group%20by%20B%20order%20by%20SUM(E)%20desc%20label%20SUM(E)%20%27Total%27';
       var monthly_total_distribution = '<object type="text/html" data="'+base_URL+encoded_query_monthly_total_distribution+'" ></object>';
       document.getElementById("Month_Total_Distribution").innerHTML = monthly_total_distribution;
@@ -148,7 +156,7 @@
         document.getElementById("Month_Total").innerHTML = monthly_total;
 
         var encoded_query_monthly_total_distribution = 'SELECT%20B%2CSUM(E)%20WHERE%20date%20%27'+start_date_of_month+'%27%20%3C%3D%20A%20and%20date%20%27'+end_date_of_month+'%27%20%3E%3D%20A%20and%20E%20%3E%200%20group%20by%20B%20order%20by%20SUM(E)%20desc%20label%20SUM(E)%20%27Total%27';
-        var monthly_total_distribution = '<object type="text/html" data="'+base_URL+encoded_query_monthly_total_distribution+'" ></object>';
+        var monthly_total_distribution = '<object type="text/html" data="'+base_URL+encoded_query_monthly_total_distribution+'" style="overflow:auto;"></object>';
         document.getElementById("Month_Total_Distribution").innerHTML = monthly_total_distribution;
         
         var encoded_query_net_monthly_total = 'SELECT%20sum(E)%20WHERE%20date%20%27'+start_date_of_month+'%27%20%3C%3D%20A%20and%20date%20%27'+end_date_of_month+'%27%20%3E%3D%20A%20label%20sum(E)%20%27This%20Month%20Net%20Total%27';
@@ -164,9 +172,10 @@
 
       function updateCategorySpend(){
         var category = document.getElementById("Category").value;
-        
-        start_date_of_month = getStartAndEndDatesFromMonth(document.getElementById("month").value)[0];
-        end_date_of_month = getStartAndEndDatesFromMonth(document.getElementById("month").value)[1];
+
+        var start_end_dates = getStartAndEndDatesFromMonth(document.getElementById("month").value);
+        start_date_of_month = start_end_dates[0];
+        end_date_of_month = start_end_dates[1];
 
         var encoded_query_monthly_category_total = 'SELECT%20sum(E)%20WHERE%20date%20%27'+start_date_of_month+'%27%20%3C%3D%20A%20and%20date%20%27'+end_date_of_month+'%27%20%3E%3D%20A%20and%20B%20%3D%20%27'+category+'%27%20and%20E%20%3E%200%20label%20sum(E)%20%27Category%20Expense%27';
         var monthly_category_total = '<object type="text/html" data="'+base_URL+encoded_query_monthly_category_total+'" ></object>';
@@ -205,6 +214,8 @@
         dates_array.push(end_date_of_month);
         return dates_array;
       }
+      
+
     </script>
 </body>
 </html>
