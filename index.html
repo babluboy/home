@@ -55,6 +55,7 @@
     <div>
     	<h2>Expense Register</h2>
       <div id="Expense_Entry_Sucess"></div>
+      <br>
       <div class="row col-sm-2">
     		  <button type="button" class="btn btn-primary" onclick="window.location.href='expense_entry.html'">Expense Entry</button>
       </div>
@@ -115,7 +116,7 @@
       if(page_param.indexOf("?") != -1){
         sucess_message = page_param.replace("?expense_entry=","");
         sucess_message = decodeURI(sucess_message);
-        window.getElementById("Expense_Entry_Sucess").innerHTML = sucess_message;
+        document.getElementById("Expense_Entry_Sucess").innerHTML = sucess_message;
       }
 
       //Set date for Querying details from the spreadsheet
