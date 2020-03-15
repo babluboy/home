@@ -106,11 +106,14 @@
 
       <div class="row">
         <div class="container col-sm-2" align="left" id="Month_Category_Total"></div>
-        <div class="container col-sm-2" id="Month_Category_Details"></div>
+        <div class="container col-sm-12" id="Month_Category_Details"></div>
       </div>
     </div>
 
     <script>
+
+      
+
       //Set data for acknowledgement if coming here after entering expense data
       var page_param = parent.document.URL.substring(parent.document.URL.indexOf('?'), parent.document.URL.length);;
       if(page_param.indexOf("?") != -1){
@@ -131,6 +134,7 @@
       var monthly_total = '<object type="text/html" data="'+base_URL+encoded_query_monthly_total+'" ></object>';
       document.getElementById("Month_Total").innerHTML = monthly_total;
       
+            
       var encoded_query_monthly_total_distribution = 'SELECT%20B%2CSUM(E)%20WHERE%20date%20%27'+start_date_of_month+'%27%20%3C%3D%20A%20and%20date%20%27'+end_date_of_month+'%27%20%3E%3D%20A%20and%20E%20%3E%200%20group%20by%20B%20order%20by%20SUM(E)%20desc%20label%20SUM(E)%20%27Total%27';
       var monthly_total_distribution = '<object type="text/html" data="'+base_URL+encoded_query_monthly_total_distribution+'" ></object>';
       document.getElementById("Month_Total_Distribution").innerHTML = monthly_total_distribution;
